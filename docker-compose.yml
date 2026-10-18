@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  solobiz-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solobiz_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    environment:
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - OLLAMA_HOST=http://host.docker.internal:11434
+      - OLLAMA_MODEL=llama3.2:latest
+      - DATA_DIR=/app/data
+      - UPLOAD_DIR=/app/uploads
+      - DATABASE_NAME=solobiz.db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Optional: Containerized Ollama instance (Uncomment if you want Ollama in Docker)
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: solobiz_ollama
+  #   restart: unless-stopped
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_models:/root/.ollama
+
+# volumes:
+#   ollama_models:

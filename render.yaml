@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: solobiz-ai
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run.py
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: DATA_DIR
+        value: /var/data/data
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: DATABASE_NAME
+        value: solobiz.db
+      - key: OLLAMA_HOST
+        value: http://localhost:11434
+      - key: OLLAMA_MODEL
+        value: llama3.2:latest
+    disk:
+      name: solobiz-storage
+      mountPath: /var/data
+      sizeGB: 1

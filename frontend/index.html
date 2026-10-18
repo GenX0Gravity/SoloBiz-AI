@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoloBiz AI — Local-First AI Business Assistant</title>
+  <meta name="description" content="Local-first AI assistant for freelancers and small business owners to manage invoices, receipts, and expenses with 100% on-device privacy.">
+  
+  <!-- Modern Typography (Plus Jakarta Sans & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for Expense Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Collapsible Sidebar -->
+    <aside class="app-sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand-badge" id="brandLogo">
+          <div class="brand-icon">S</div>
+          <div class="brand-text">
+            <h1>SoloBiz AI</h1>
+            <span>Local-First Core</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Main Navigation">
+        <div class="nav-section-title">Operations</div>
+        <a href="#overview" class="nav-link active" data-view="overview" id="navLinkOverview">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span>Dashboard Overview</span>
+        </a>
+        <a href="#expenses" class="nav-link" data-view="expenses" id="navLinkExpenses">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Expense Manager</span>
+        </a>
+        <a href="#documents" class="nav-link" data-view="documents" id="navLinkDocuments">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Receipt Scanner (OCR)</span>
+        </a>
+
+        <div class="nav-section-title">Finance & AI</div>
+        <a href="#assistant" class="nav-link" data-view="assistant" id="navLinkAssistant">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          <span>AI Business Assistant</span>
+        </a>
+        <a href="#invoices" class="nav-link" data-view="invoices" id="navLinkInvoices">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Invoices & PDF Gen</span>
+        </a>
+
+        <div class="nav-section-title">System & Security</div>
+        <a href="#settings" class="nav-link" data-view="settings" id="navLinkSettings">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span>Privacy & Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status-box" id="systemStatusCard">
+          <div class="status-indicator-row">
+            <span class="status-label" id="aiStatusLabel">Ollama Local</span>
+            <span class="status-pulse-dot" id="aiStatusPill"></span>
+          </div>
+          <div class="status-detail" id="aiStatusDetail">Checking model...</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <!-- Top Application Header -->
+      <header class="app-header">
+        <div class="header-left">
+          <button id="btnToggleSidebar" class="btn btn-secondary btn-icon" style="display: none; margin-right: 12px;" aria-label="Toggle Menu">
+            <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h2 id="pageTitle">Dashboard Overview</h2>
+          <p id="pageDesc">Real-time expense trends, monthly burn rate, and pending invoices</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btnHeaderUpload">
+            <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            <span>Scan Receipt</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ===================================================================
+           VIEW 1: DASHBOARD OVERVIEW
+           =================================================================== -->
+      <section class="view-section" id="view-overview">
+        <!-- Metric Cards Grid -->
+        <div class="metrics-grid">
+          <div class="glass-card metric-card">
+            <div class="metric-top">
+              <span class="metric-title">All-Time Expenses</span>
+              <div class="metric-icon-wrap">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+            <div class="metric-value font-mono" id="metricTotalExpenses">$0.00</div>
+            <div class="metric-footer">
+              <span>Local SQLite Records</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-top">
+              <span class="metric-title">This Month Spend</span>
+              <div class="metric-icon-wrap" style="color: var(--accent-cyan); background: var(--accent-cyan-light);">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
+            </div>
+            <div class="metric-value font-mono" id="metricCurrentMonth">$0.00</div>
+            <div class="metric-footer">
+              <span class="trend-badge neutral" id="metricMoMBadge">0% vs last mo</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-top">
+              <span class="metric-title">Pending Invoices</span>
+              <div class="metric-icon-wrap" style="color: var(--accent-amber); background: var(--accent-amber-light);">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+            <div class="metric-value font-mono" id="metricPendingInvoices">$0.00</div>
+            <div class="metric-footer">
+              <span id="metricPendingCount" style="color: var(--accent-amber); font-weight: 600;">0 pending</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-top">
+              <span class="metric-title">Scanned Receipts</span>
+              <div class="metric-icon-wrap" style="color: var(--accent-emerald); background: var(--accent-emerald-light);">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+            <div class="metric-value font-mono" id="metricScannedCount">0</div>
+            <div class="metric-footer">
+              <span>100% On-Device OCR</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Analytics Grid -->
+        <div class="analytics-grid">
+          <div class="glass-card">
+            <div class="chart-header">
+              <h3>Monthly Spending Trend</h3>
+              <span class="badge badge-software">Interactive Timeline</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="monthlySpendChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="chart-header">
+              <h3>Category Breakdown</h3>
+              <span class="badge badge-marketing">Deductibles</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="categorySpendChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions Table Card -->
+        <div class="glass-card">
+          <div class="chart-header">
+            <h3>Recent Business Expenses</h3>
+            <button class="btn btn-sm btn-secondary" onclick="window.switchView('expenses')">View All Records &rarr;</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Merchant / Description</th>
+                  <th>Category</th>
+                  <th>Payment Method</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="recentTxTableBody">
+                <!-- Populated via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 2: EXPENSES MANAGER
+           =================================================================== -->
+      <section class="view-section" id="view-expenses" style="display: none;">
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <div class="filter-toolbar">
+            <div class="search-input-wrap">
+              <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" class="search-input" id="expenseSearchInput" placeholder="Search merchant, notes, or receipt...">
+            </div>
+
+            <div class="filter-actions">
+              <select class="custom-select" id="expenseCategoryFilter" aria-label="Filter by category">
+                <option value="All">All Categories</option>
+                <option value="Software">Software</option>
+                <option value="Travel">Travel</option>
+                <option value="Equipment">Equipment</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Office Supplies">Office Supplies</option>
+                <option value="Legal & Professional">Legal & Professional</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Other">Other</option>
+              </select>
+
+              <button class="btn btn-secondary" id="btnExportExpensesCsv">
+                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Export CSV</span>
+              </button>
+
+              <button class="btn btn-primary" id="btnAddExpense">
+                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Add Expense</span>
+              </button>
+            </div>
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;" id="expensesCountSummary">
+            Loading expenses...
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Merchant / Title</th>
+                  <th>Category</th>
+                  <th>Payment Method</th>
+                  <th>Tax</th>
+                  <th>Total Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="expensesTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 3: RECEIPT SCANNER & DOCUMENTS
+           =================================================================== -->
+      <section class="view-section" id="view-documents" style="display: none;">
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <!-- Dropzone -->
+          <div class="dropzone-container" id="documentDropzone">
+            <input type="file" id="receiptFileInput" style="display: none;" accept=".pdf,.png,.jpg,.jpeg">
+            <div class="dropzone-icon">
+              <svg style="width: 32px; height: 32px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            </div>
+            <h3 class="dropzone-title">Upload Receipt or Invoice</h3>
+            <p class="dropzone-subtitle">Drag and drop your PDF, PNG, or JPG document here, or click to browse. Files are processed 100% locally on your machine.</p>
+            <div class="dropzone-formats">
+              <span class="format-chip">PDF</span>
+              <span class="format-chip">PNG</span>
+              <span class="format-chip">JPG</span>
+              <span class="format-chip">Max 15MB</span>
+            </div>
+
+            <div id="uploadSpinner" style="display: none; margin-top: 20px; font-weight: 600; color: var(--accent-cyan);">
+              Extracting text and analyzing fields locally...
+            </div>
+          </div>
+
+          <!-- Documents Archive Table -->
+          <div class="chart-header">
+            <h3>Uploaded Documents Archive</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Doc ID</th>
+                  <th>File Name</th>
+                  <th>Type</th>
+                  <th>File Size</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="documentsTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 4: AI BUSINESS ASSISTANT
+           =================================================================== -->
+      <section class="view-section" id="view-assistant" style="display: none;">
+        <!-- Offline Warning Banner -->
+        <div class="glass-card" id="aiOfflineBanner" style="display: none; margin-bottom: 20px; border-left: 4px solid var(--accent-amber);">
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <svg style="width: 24px; height: 24px; color: var(--accent-amber); flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div>
+              <h4 style="color: var(--text-main); font-weight: 700; margin-bottom: 4px;">Ollama Local Model Offline</h4>
+              <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 8px;">
+                Ollama runtime is not detected on <code>http://localhost:11434</code>. The assistant will answer using direct SQLite database records. To enable conversational AI reasoning, start Ollama:
+              </p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <code class="font-mono" style="background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">ollama serve</code>
+                <code class="font-mono" style="background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">ollama run llama3.2</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-card">
+          <div class="chat-header">
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem;">SoloBiz AI Financial Strategist</div>
+              <div style="font-size: 0.76rem; color: var(--text-muted);">Grounded on verified local SQLite database records</div>
+            </div>
+            <span class="badge badge-software">100% On-Device</span>
+          </div>
+
+          <div class="chat-messages" id="chatMessages">
+            <div class="message-bubble assistant">
+              <div class="assistant-meta">SoloBiz Assistant</div>
+              Hello! I am your private local business assistant. Ask me questions about your expenses, spending by category, pending client invoices, or tax deductions. All financial data stays strictly on this machine.
+            </div>
+          </div>
+
+          <!-- Quick Suggestion Chips -->
+          <div class="prompt-chips-bar">
+            <button class="prompt-chip" data-prompt="What was my highest spending category this month?">Highest category?</button>
+            <button class="prompt-chip" data-prompt="How much did I spend on Software and Cloud tools?">Software spending?</button>
+            <button class="prompt-chip" data-prompt="Summarize my pending client invoices and total amounts due">Pending invoices summary</button>
+            <button class="prompt-chip" data-prompt="Give me 3 cost-cutting recommendations based on my recent receipts">3 cost-cutting tips</button>
+          </div>
+
+          <div class="chat-input-bar">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Ask about your business expenses or invoices...">
+            <button class="btn btn-primary" id="chatSendBtn">
+              <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              <span>Send</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 5: INVOICES & PDF GENERATOR
+           =================================================================== -->
+      <section class="view-section" id="view-invoices" style="display: none;">
+        <!-- Two Column Generator Layout -->
+        <div class="invoice-generator-grid" style="margin-bottom: 30px;">
+          <!-- Left: Invoice Editor -->
+          <div class="glass-card">
+            <div class="chart-header">
+              <h3>Create Professional Invoice</h3>
+              <span class="badge badge-software">Deterministic Math</span>
+            </div>
+
+            <form id="invoiceForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="invNumber">Invoice #</label>
+                  <input type="text" class="form-control font-mono" id="invNumber" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="invStatus">Status</label>
+                  <select class="form-control" id="invStatus">
+                    <option value="Draft">Draft</option>
+                    <option value="Sent" selected>Sent</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Overdue">Overdue</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="invIssueDate">Issue Date</label>
+                  <input type="date" class="form-control" id="invIssueDate" value="2026-10-18">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="invDueDate">Due Date</label>
+                  <input type="date" class="form-control" id="invDueDate" value="2026-11-01">
+                </div>
+              </div>
+
+              <hr style="border: none; border-top: 1px solid var(--border-color); margin: 16px 0;">
+
+              <!-- Client Info -->
+              <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px;">Client Details</h4>
+              <div class="form-group">
+                <label class="form-label" for="invClientName">Client / Company Name</label>
+                <input type="text" class="form-control" id="invClientName" placeholder="Acme Innovations Ltd" value="Acme Innovations Ltd" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="invClientEmail">Client Email</label>
+                  <input type="email" class="form-control" id="invClientEmail" placeholder="billing@acme.com" value="billing@acme.com">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="invClientAddress">Billing Address</label>
+                  <input type="text" class="form-control" id="invClientAddress" placeholder="742 Evergreen Terr, Tech District" value="742 Evergreen Terr, Tech District">
+                </div>
+              </div>
+
+              <!-- Sender Info -->
+              <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--text-main); margin: 16px 0 12px 0;">Your Business Info</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="invSenderName">Sender / Business Name</label>
+                  <input type="text" class="form-control" id="invSenderName" value="SoloBiz Studio">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="invSenderEmail">Sender Email</label>
+                  <input type="email" class="form-control" id="invSenderEmail" value="billing@solobiz.studio">
+                </div>
+              </div>
+
+              <!-- Line Items -->
+              <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--text-main); margin: 16px 0 10px 0;">Line Items</h4>
+              <div class="line-items-header">
+                <div>Description</div>
+                <div>Qty</div>
+                <div>Rate ($)</div>
+                <div style="text-align: right;">Total</div>
+                <div></div>
+              </div>
+
+              <div id="invoiceItemsContainer">
+                <!-- Populated via JS -->
+              </div>
+
+              <button type="button" class="btn btn-sm btn-secondary" id="btnAddInvoiceItem" style="margin-top: 8px;">
+                + Add Line Item
+              </button>
+
+              <hr style="border: none; border-top: 1px solid var(--border-color); margin: 18px 0;">
+
+              <!-- Rates & Notes -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="invTaxRate">Tax Rate (%)</label>
+                  <input type="number" class="form-control font-mono" id="invTaxRate" min="0" max="100" step="0.25" value="8.25">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="invDiscountRate">Discount (%)</label>
+                  <input type="number" class="form-control font-mono" id="invDiscountRate" min="0" max="100" step="1" value="0">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="invNotes">Payment Terms & Notes</label>
+                <textarea class="form-control" id="invNotes" rows="2">Payment is due upon receipt. Direct wire or card payment accepted.</textarea>
+              </div>
+
+              <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="button" class="btn btn-primary" id="btnSaveInvoice" style="flex: 1;">
+                  Save & Generate Invoice
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right: Live Paper Preview -->
+          <div>
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">
+              Live Client PDF Preview
+            </div>
+            <div class="invoice-paper-preview" id="invoicePaperPreview">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoices List Table -->
+        <div class="glass-card">
+          <div class="chart-header">
+            <h3>All Generated Invoices</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Client</th>
+                  <th>Issue Date</th>
+                  <th>Due Date</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="invoicesTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 6: PRIVACY & SETTINGS
+           =================================================================== -->
+      <section class="view-section" id="view-settings" style="display: none;">
+        <!-- Privacy Architecture Card -->
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <div class="chart-header">
+            <h3>Local-First Architecture & Privacy Guarantees</h3>
+            <span class="badge badge-office">Zero Cloud Telemetry</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 18px; line-height: 1.6;">
+            SoloBiz AI is engineered specifically so freelancers and small businesses can maintain 100% financial privacy.
+            Unlike cloud-hosted solutions that transmit financial records, client names, and tax documents to third-party APIs,
+            SoloBiz AI keeps all execution on-device.
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+            <div style="background: rgba(0,0,0,0.25); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: var(--accent-cyan); margin-bottom: 4px;">Local SQLite Storage</div>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">
+                Expenses, invoices, and documents are stored in <code>data/solobiz.db</code> on your local hard drive. Fully queryable with parameterized SQL.
+              </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.25); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: var(--accent-emerald); margin-bottom: 4px;">Local Document Files</div>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">
+                Uploaded receipt PDFs and images reside in your local <code>uploads/</code> folder with SHA-256 deduplication and path sanitization.
+              </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.25); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: var(--primary); margin-bottom: 4px;">Ollama Open-Weight AI</div>
+              <div style="font-size: 0.84rem; color: var(--text-muted);">
+                AI reasoning is powered by open-weight models running on your local GPU/CPU. Zero API keys, zero cloud egress, zero subscription fees.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ollama Status & Model Selection -->
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <div class="chart-header">
+            <h3>Ollama Local Model Status</h3>
+            <button class="btn btn-sm btn-secondary" onclick="window.location.reload()">Refresh Connection</button>
+          </div>
+          <p id="settingsOllamaStatus" style="font-weight: 600; margin-bottom: 12px;">Checking Ollama status...</p>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;">Installed Models on Host:</div>
+            <div id="settingsInstalledModels" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+          </div>
+
+          <h4 style="font-size: 0.95rem; font-weight: 700; margin: 20px 0 10px 0;">Recommended Open-Weight Models</h4>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Specifications & Hardware Needs</th>
+                  <th>Terminal Install Command</th>
+                </tr>
+              </thead>
+              <tbody id="settingsRecommendedModels">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 1: ADD/EDIT EXPENSE
+       ======================================================================= -->
+  <div class="modal-backdrop" id="expenseModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalExpenseTitle" style="font-size: 1.15rem; font-weight: 700;">Add Manual Expense</h3>
+        <button class="btn btn-sm btn-secondary btn-icon" data-close-modal>&times;</button>
+      </div>
+      <form id="expenseForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="expFormTitle">Merchant / Title</label>
+            <input type="text" class="form-control" id="expFormTitle" placeholder="e.g. GitHub Copilot, Delta Airlines" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="expFormAmount">Total Amount ($)</label>
+              <input type="number" class="form-control font-mono" id="expFormAmount" step="0.01" min="0" placeholder="0.00" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="expFormCategory">Category</label>
+              <select class="form-control" id="expFormCategory">
+                <option value="Software">Software</option>
+                <option value="Travel">Travel</option>
+                <option value="Equipment">Equipment</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Office Supplies">Office Supplies</option>
+                <option value="Legal & Professional">Legal & Professional</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="expFormDate">Date</label>
+              <input type="date" class="form-control" id="expFormDate" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="expFormPayment">Payment Method</label>
+              <input type="text" class="form-control" id="expFormPayment" value="Credit Card">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expFormTax">Tax Amount ($ optional)</label>
+            <input type="number" class="form-control font-mono" id="expFormTax" step="0.01" min="0" value="0.00">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expFormNotes">Notes / Business Purpose</label>
+            <textarea class="form-control" id="expFormNotes" rows="2" placeholder="e.g. Client sprint tooling"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 2: VERIFICATION DRAWER (AI RECEIPT SCANNER)
+       ======================================================================= -->
+  <div class="modal-backdrop" id="verificationModal">
+    <div class="modal-card" style="max-width: 820px;">
+      <div class="modal-header">
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 700;">Verify Extracted Receipt</h3>
+          <p style="font-size: 0.8rem; color: var(--text-secondary);">Verify AI-extracted values before committing to database</p>
+        </div>
+        <button class="btn btn-sm btn-secondary btn-icon" data-close-modal>&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="verifyDuplicateWarning" style="display: none; background: rgba(245, 158, 11, 0.15); border: 1px solid var(--accent-amber); border-radius: var(--radius-md); padding: 12px; margin-bottom: 16px; font-size: 0.84rem; color: #fbbf24;">
+          <strong>Notice:</strong> This document hash already exists in your local archive. You are verifying a re-uploaded document.
+        </div>
+
+        <div class="extraction-preview-grid">
+          <!-- Left: Document Details & Raw Snippet -->
+          <div>
+            <h4 style="font-size: 0.84rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Document Source</h4>
+            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 14px; font-size: 0.82rem;">
+              <div><strong>File:</strong> <span id="verifyDocName">receipt.pdf</span></div>
+              <div><strong>Format:</strong> <span id="verifyDocType">PDF</span> (<span id="verifyDocSize">0 KB</span>)</div>
+              <div style="margin-top: 6px;">
+                <strong>Engine:</strong> <span id="verifySourceBadge" class="badge badge-software">Local Engine</span>
+              </div>
+            </div>
+
+            <h4 style="font-size: 0.84rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Raw Text Extracted</h4>
+            <div class="raw-text-box" id="verifyRawText">No text</div>
+          </div>
+
+          <!-- Right: Verification Form -->
+          <form id="verifySaveForm">
+            <input type="hidden" id="verifyDocId">
+            <h4 style="font-size: 0.84rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Extracted Financial Fields</h4>
+
+            <div class="form-group">
+              <label class="form-label" for="verifyMerchant">Merchant / Title</label>
+              <input type="text" class="form-control" id="verifyMerchant" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="verifyTotal">Total Amount ($)</label>
+                <input type="number" class="form-control font-mono" id="verifyTotal" step="0.01" min="0" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="verifyDate">Date</label>
+                <input type="date" class="form-control" id="verifyDate" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="verifyCategory">Category</label>
+                <select class="form-control" id="verifyCategory">
+                  <option value="Software">Software</option>
+                  <option value="Travel">Travel</option>
+                  <option value="Equipment">Equipment</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Office Supplies">Office Supplies</option>
+                  <option value="Legal & Professional">Legal & Professional</option>
+                  <option value="Utilities">Utilities</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="verifyPayment">Payment Method</label>
+                <input type="text" class="form-control" id="verifyPayment" value="Credit Card">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="verifySubtotal">Subtotal ($)</label>
+                <input type="number" class="form-control font-mono" id="verifySubtotal" step="0.01" min="0" value="0.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="verifyTax">Tax Amount ($)</label>
+                <input type="number" class="form-control font-mono" id="verifyTax" step="0.01" min="0" value="0.00">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="verifyNotes">Notes / Purpose</label>
+              <input type="text" class="form-control" id="verifyNotes">
+            </div>
+
+            <div style="margin-top: 18px; display: flex; gap: 10px; justify-content: flex-end;">
+              <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+              <button type="submit" class="btn btn-success">Confirm & Save Expense</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notifications Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Application Logic -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
