@@ -5,10 +5,12 @@
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
 [![Ollama](https://img.shields.io/badge/Local%20AI-Ollama-black.svg)](https://ollama.com/)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2026-orange.svg)](https://hacktoberfest.com/)
+[![Deployed on Vercel](https://img.shields.io/badge/Vercel-Deployed-000000.svg?logo=vercel)](https://solobiz-ai.vercel.app)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-solobiz--ai.loca.lt-6366f1.svg)](https://solobiz-ai.loca.lt)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/GenX0Gravity/SoloBiz-AI)
 
-> **Live Interactive Demo:** [https://solobiz-ai.loca.lt](https://solobiz-ai.loca.lt) *(Tunnel Password / IP: `152.58.182.93`)*  
+> **Live on Vercel:** [https://solobiz-ai.vercel.app](https://solobiz-ai.vercel.app)  
+> **Live Localhost Tunnel:** [https://solobiz-ai.loca.lt](https://solobiz-ai.loca.lt) *(Tunnel Password / IP: `152.58.182.93`)*  
 > **1-Click Render Deploy:** [Deploy to Render Blueprint](https://render.com/deploy?repo=https://github.com/GenX0Gravity/SoloBiz-AI)
 
 **SoloBiz AI** is a privacy-first, on-device business intelligence and invoicing assistant designed for freelancers, solopreneurs, and small business owners. It provides automated invoice scanning, expense analytics, professional PDF invoice generation, and financial reasoning without ever sending sensitive financial documents or client data to external cloud AI APIs.
@@ -184,6 +186,18 @@ SoloBiz AI includes a blueprint specification in `render.yaml`.
    - `DATA_DIR` is set to `/var/data/data` and `UPLOAD_DIR` to `/var/data/uploads`.
    - Your expenses database and uploaded receipts will persist across restarts and redeployments.
 5. Click **Apply** to deploy.
+
+### Option C: Serverless Deployment on Vercel
+
+SoloBiz AI is configured for zero-configuration serverless deployment on Vercel:
+
+1. The repository includes [`vercel.json`](vercel.json) with `@vercel/python` builds and routing rules.
+2. The serverless entrypoint in [`api/index.py`](api/index.py) runs on Python 3.12, utilizing `/tmp` for ephemeral database initialization and pre-seeded demo records.
+3. Deploy directly using the Vercel CLI:
+   ```bash
+   npx vercel --prod
+   ```
+   Or import `https://github.com/GenX0Gravity/SoloBiz-AI` into your [Vercel Dashboard](https://vercel.com/new).
 
 ### Cloud vs. Local AI Architecture Notes
 

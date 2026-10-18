@@ -186,5 +186,7 @@ def seed_sample_data():
 
         print("Sample data successfully seeded!")
 
+seed_demo_data = seed_sample_data
+
 if __name__ == "__main__":
     seed_sample_data()

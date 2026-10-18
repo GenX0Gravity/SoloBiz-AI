@@ -83,6 +83,14 @@ app.add_middleware(
 
 # ----------------- Health & Status Endpoints -----------------
 
+@app.get("/api/index.py")
+@app.get("/api/index")
+def vercel_entrypoint_fallback():
+    index_file = BASE_DIR / "frontend" / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+    return {"status": "online", "message": "SoloBiz AI API"}
+
 @app.get("/health")
 @app.get("/api/health")
 def health_check():

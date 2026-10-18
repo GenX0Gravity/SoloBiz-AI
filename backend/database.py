@@ -18,7 +18,10 @@ def get_db_connection() -> Generator[sqlite3.Connection, None, None]:
     conn = sqlite3.connect(str(DB_PATH), timeout=20.0)
     conn.row_factory = dict_factory
     conn.execute("PRAGMA foreign_keys = ON;")
-    conn.execute("PRAGMA journal_mode = WAL;")
+    try:
+        conn.execute("PRAGMA journal_mode = WAL;")
+    except Exception:
+        conn.execute("PRAGMA journal_mode = DELETE;")
     try:
         yield conn
         conn.commit()

@@ -4,10 +4,14 @@ from pathlib import Path
 # Base Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-_upload_env = os.getenv("UPLOAD_DIR", "uploads")
-UPLOAD_DIR = Path(_upload_env) if Path(_upload_env).is_absolute() else (BASE_DIR / _upload_env)
+if os.getenv("VERCEL"):
+    _upload_env = os.getenv("UPLOAD_DIR", "/tmp/uploads")
+    _data_env = os.getenv("DATA_DIR", "/tmp/data")
+else:
+    _upload_env = os.getenv("UPLOAD_DIR", "uploads")
+    _data_env = os.getenv("DATA_DIR", "data")
 
-_data_env = os.getenv("DATA_DIR", "data")
+UPLOAD_DIR = Path(_upload_env) if Path(_upload_env).is_absolute() else (BASE_DIR / _upload_env)
 DATA_DIR = Path(_data_env) if Path(_data_env).is_absolute() else (BASE_DIR / _data_env)
 
 DB_PATH = DATA_DIR / os.getenv("DATABASE_NAME", "solobiz.db")
