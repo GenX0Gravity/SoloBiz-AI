@@ -24,10 +24,10 @@ Worse, existing commercial accounting tools either charge hefty monthly subscrip
 ## Demo
 
 - **GitHub Repository:** [https://github.com/GenX0Gravity/SoloBiz-AI.git](https://github.com/GenX0Gravity/SoloBiz-AI.git)
-- **Live Interactive Demo:** [https://evil-trams-camp.loca.lt](https://evil-trams-camp.loca.lt)  
+- **Live Interactive Demo:** [https://solobiz-ai.loca.lt](https://solobiz-ai.loca.lt)  
   *(Note: If prompted for the Localtunnel Endpoint IP / Password, enter: `152.58.182.93`)*
 - **1-Click Cloud Deployment:** [Deploy to Render Blueprint](https://render.com/deploy?repo=https://github.com/GenX0Gravity/SoloBiz-AI)
-- **API Health Check:** [https://evil-trams-camp.loca.lt/health](https://evil-trams-camp.loca.lt/health)
+- **API Health Check:** [https://solobiz-ai.loca.lt/health](https://solobiz-ai.loca.lt/health)
 
 ### Quick Visual Walkthrough
 

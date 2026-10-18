@@ -5,10 +5,10 @@
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
 [![Ollama](https://img.shields.io/badge/Local%20AI-Ollama-black.svg)](https://ollama.com/)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2026-orange.svg)](https://hacktoberfest.com/)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-evil--trams--camp.loca.lt-6366f1.svg)](https://evil-trams-camp.loca.lt)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-solobiz--ai.loca.lt-6366f1.svg)](https://solobiz-ai.loca.lt)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/GenX0Gravity/SoloBiz-AI)
 
-> **Live Interactive Demo:** [https://evil-trams-camp.loca.lt](https://evil-trams-camp.loca.lt) *(Tunnel Password / IP: `152.58.182.93`)*  
+> **Live Interactive Demo:** [https://solobiz-ai.loca.lt](https://solobiz-ai.loca.lt) *(Tunnel Password / IP: `152.58.182.93`)*  
 > **1-Click Render Deploy:** [Deploy to Render Blueprint](https://render.com/deploy?repo=https://github.com/GenX0Gravity/SoloBiz-AI)
 
 **SoloBiz AI** is a privacy-first, on-device business intelligence and invoicing assistant designed for freelancers, solopreneurs, and small business owners. It provides automated invoice scanning, expense analytics, professional PDF invoice generation, and financial reasoning without ever sending sensitive financial documents or client data to external cloud AI APIs.
